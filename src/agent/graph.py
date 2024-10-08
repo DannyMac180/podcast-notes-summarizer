@@ -15,7 +15,7 @@ class PodcastNotesState(BaseModel):
 
 # Node 1: Get recent podcast notes
 @tool
-def get_recent_podcast_notes(days: int = 7) -> Dict[str, List[str]]:
+def get_recent_podcast_notes(state: PodcastNotesState, days: int = 7) -> Dict[str, List[str]]:
     """Get podcast note titles from Obsidian that were synced in the last 7 days."""
     obsidian_dir = "/Users/danielmcateer/Library/Mobile Documents/iCloud~md~obsidian/Documents/Ideaverse/Readwise/Sync.md"
     
@@ -39,7 +39,7 @@ def get_recent_podcast_notes(days: int = 7) -> Dict[str, List[str]]:
 
 # Node 2: Collect notes
 @tool
-def collect_notes(titles: List[str]) -> Dict[str, List[str]]:
+def collect_notes(state: PodcastNotesState, titles: List[str]) -> Dict[str, List[str]]:
     """Collect full notes for the given titles."""
     obsidian_dir = "/Users/danielmcateer/Library/Mobile Documents/iCloud~md~obsidian/Documents/Ideaverse/Readwise/Sync.md"
     
@@ -65,10 +65,11 @@ summarize_prompt = ChatPromptTemplate.from_messages([
 
 summarize_chain = summarize_prompt | ChatOpenAI(model="gpt-4")
 
-def summarize_notes(input: Dict[str, List[str]]) -> Dict[str, str]:
-    notes = "\n\n".join(input["collected_notes"])
+def summarize_notes(state: PodcastNotesState) -> Dict[str, str]:
+    notes = "\n\n".join(state.collected_notes)
     summary = summarize_chain.run({"notes": notes})
-    return {"summary": summary}
+    state.summary = summary
+    return state
 
 # Define the graph
 workflow = StateGraph(PodcastNotesState)
@@ -88,7 +89,3 @@ workflow.set_entry_point("get_recent_notes")
 
 # Compile the graph
 graph = workflow.compile()
-
-# Execute the graph
-result = graph.invoke({})
-print(result)
