@@ -1,4 +1,4 @@
-from langchain.document_loaders import ObsidianLoader
+from langchain_community.document_loaders import ObsidianLoader
 from datetime import datetime, timedelta
 import ell
 from dotenv import load_dotenv
@@ -42,7 +42,7 @@ def extract_summary(notes: str) -> str:
     Summarize the podcast notes.
     The notes are in the format of a podcast transcript with metadata at the top.
     The summaries should especially focus on the highlights and key ideas and insights.
-    Return the summary as a string.
+    Return the summary as a markdown formatted string.
     """
     # Your logic to summarize goes here
     return f"Summarize the podcast notes here: {notes}"
@@ -62,15 +62,17 @@ for doc in recent_documents:
     
     summary = extract_summary(notes)
     summaries.append(
-        f"Title: {metadata['title']}\n"
-        f"Source URL: {metadata['source_url']}\n"
-        f"Summary:\n{summary}\n\n"
-        f"Authors: {metadata['authors']}\n\n"
+        f"## {metadata['title'].strip('[]')}\n\n"
+        f"[Source]({metadata['source_url']})\n\n"
+        f"### Summary\n\n{summary}\n\n"
+        f"**Authors:** {metadata['authors'].strip('[]')}\n\n"
+        f"---\n\n"
     )
 
-with open('summarized_podcasts.txt', 'w') as f:
+with open('summarized_podcasts.md', 'w') as f:
+    f.write("# Summarized Podcasts\n\n")
     f.writelines(summaries)
     
     print("Summarized Podcasts:")
-    with open('summarized_podcasts.txt', 'r') as f:
+    with open('summarized_podcasts.md', 'r') as f:
         print(f.read())
