@@ -1,6 +1,4 @@
-langgraph
-langchain
 langchain_community
-langchain_core
-langchain_openai
-pydantic
+python-dateutil
+ell-ai
+python-dotenv

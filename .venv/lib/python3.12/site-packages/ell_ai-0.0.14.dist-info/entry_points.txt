@@ -1,0 +1,3 @@
+[console_scripts]
+ell-studio=ell.studio.__main__:main
+
