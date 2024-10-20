@@ -64,8 +64,8 @@ for doc in recent_documents:
     summaries.append(
         f"## {metadata['title'].strip('[]')}\n\n"
         f"[Source]({metadata['source_url']})\n\n"
-        f"### Summary\n\n{summary}\n\n"
         f"**Authors:** {metadata['authors'].strip('[]')}\n\n"
+        f"### Summary\n\n{summary}\n\n"
         f"---\n\n"
     )
 
