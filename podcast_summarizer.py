@@ -36,7 +36,7 @@ for doc in documents:
 
 print(f"Number of documents updated in the last 7 days: {len(recent_documents)}")
 
-@ell.simple(model="gpt-4o")
+@ell.simple(model="claude-3-5-sonnet-20240620")
 def extract_summary(notes: str) -> str:
     """
     Summarize the podcast notes.
